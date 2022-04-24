@@ -1,0 +1,50 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block main %}
+{% comment %} page header  {% endcomment %}
+<header class="masthead" style="background-image: url('{% static 'registration/adminlte/assets/img/photo1.png' %}')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1>salman gazani</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+           {% block header %} {% endblock %}
+            <!-- Post preview-->
+           {% for article in object_list %}
+             <div class="post-preview">
+                <a href="{% url 'blog:detail' article.slug %}"><h2 class="{{article.title}}">
+                    {{article.title}}
+                </h2></a>
+                <p class="post-subtitle">{{article.description|striptags|truncatewords:30}}</p>
+                <p class="post-meta">نوشته شده توسط
+                    <a href="{%  url 'blog:author' article.author %}"</a>{{article.author.get_full_name}}
+                </p>
+                <p class="post-meta">{{article.jpublish}}</p>
+            <div>
+                {% for cat in article.category_published.all %}
+                <a href="{% url 'blog:category' cat.slug %}">#{{cat.title}}</a>
+                {% endfor %}
+        </div>
+        </div>
+            {% endfor %}
+{% if is_paginated %}
+        <div class="d-flex justify-content-end mb-4">        
+            {% if page_obj.has_previous %}
+            <a class="btn btn-primary float-right ml-3" href="{% block previous_page_url %} {% endblock %}">پست های جدید →</a></div>
+            {% endif %}
+            {% if page_obj.has_next  %}
+            <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary float-right" href="{% block next_page_url %} {% endblock %}">پست های قدیمی →</a></div>
+            {% endif %}
+          </div>
+        {% endif %}
+</div>
+
+{% endblock %}
