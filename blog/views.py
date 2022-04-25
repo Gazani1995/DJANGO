@@ -7,6 +7,7 @@ from telnetlib import STATUS
 from django.shortcuts import render , get_object_or_404
 # from django.http import HttpResponse
 from .models import Article , Category
+from account.mixins import AuthorAccessMixin
 
 # Create your views here.
 # def home(request , page = 1):
@@ -89,3 +90,9 @@ class AuthorList(ListView):
         context = super().get_context_data(**kwargs)
         context['author'] = author
         return context
+
+
+class ArticlePreview(AuthorAccessMixin, DetailView):
+    def get_object(self):
+        pk = self.kwargs.get("pk")
+        return  get_object_or_404(Article, pk=pk)
